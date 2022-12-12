@@ -11,10 +11,22 @@ class HomePage extends StatefulWidget{
 
 }
 class _home_page extends State<HomePage>{
-  _home_page();
+  //_home_page();
+  late double deviceHeight,deviceWidth;
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
+
+
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 0.2*deviceHeight,
+        title: Text("Taskly!",style: TextStyle(
+          fontSize: 20,
+        ),),
+      )
+    );
   }
 
 
