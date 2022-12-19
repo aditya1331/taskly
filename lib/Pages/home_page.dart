@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:taskly/Models/Task.dart';
 
 class HomePage extends StatefulWidget{
   HomePage();
@@ -12,9 +13,10 @@ class HomePage extends StatefulWidget{
 
 }
 class _home_page extends State<HomePage>{
-  //_home_page();
+  _home_page();
   late double deviceHeight,deviceWidth;
   String? _newTaskContent;
+  Box? _box;
   @override
   Widget build(BuildContext context) {
     deviceHeight = MediaQuery.of(context).size.height;
@@ -30,13 +32,56 @@ class _home_page extends State<HomePage>{
         ),),
 
       ),
-      body: _taskList() ,
+      body: _taskView() ,
       floatingActionButton: _addTask(),
     );
   }
 
+Widget _taskView()
+{
+
+  return FutureBuilder(future: Hive.openBox('tasks'),builder:
+      (BuildContext _context, AsyncSnapshot _snapshot )
+  {
+    if(_snapshot.connectionState==ConnectionState.done)
+      { _box =_snapshot.data;
+        return _taskList();
+
+      }
+    else
+      {
+        return const Center(child: CircularProgressIndicator());
+      }
+    /*
+    iF the data is retried then list of task are viewed or else
+    a loading indicator screen is showed
+
+    */
+
+
+  },);
+}
 Widget _taskList()
 {
+  List tasks = _box!.values.toList();// ! says that values obtained from database or not NULL
+  return ListView.builder(itemCount: tasks.length,itemBuilder: (BuildContext _context ,int _index)
+  {
+    var task = Task.fromMap(tasks[_index]);
+    return  ListTile (
+      title:  Text(task.content,
+          style:  TextStyle(
+              decoration: task.done ? TextDecoration.lineThrough : null)
+      ),
+      trailing:  Icon(
+        task.done ? Icons.check_box_outlined : Icons.check_box_outline_blank_outlined,
+        color: Colors.red,),
+      subtitle: Text(task.timestamp.toString()),
+    );
+
+  },);
+
+  //_box?.add(_newTask.toMap()); // passing the value that is to be stored in data base
+// The ? speicifies conditional statement that if _box is not NULL then only excute the command
   return ListView(
     children:  [
       ListTile (
