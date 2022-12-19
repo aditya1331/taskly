@@ -76,6 +76,21 @@ Widget _taskList()
         task.done ? Icons.check_box_outlined : Icons.check_box_outline_blank_outlined,
         color: Colors.red,),
       subtitle: Text(task.timestamp.toString()),
+      onTap: ()
+      {
+        task.done =!task.done;
+        _box!.putAt(_index,task.toMap());// Dont put these commands inside setstate
+        //They wont work inside setstate
+        setState(() {
+
+        });
+      },
+      onLongPress: (){
+        _box!.deleteAt(_index);
+        setState(() {
+
+        });
+      },
     );
 
   },);
@@ -121,7 +136,7 @@ void _displayTaskPopup()
               _box!.add(task.toMap());
               setState(() {
                 _newTaskContent=null;
-                Navigator.pop(context);//Closes text field after entering task
+                Navigator.pop(context) ;//Closes text field after entering task
                 //Navigator is used to navigate between place within material app
               });
             }
