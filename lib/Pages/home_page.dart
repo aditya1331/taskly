@@ -121,6 +121,8 @@ void _displayTaskPopup()
               _box!.add(task.toMap());
               setState(() {
                 _newTaskContent=null;
+                Navigator.pop(context);//Closes text field after entering task
+                //Navigator is used to navigate between place within material app
               });
             }
         },
