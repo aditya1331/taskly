@@ -114,7 +114,16 @@ void _displayTaskPopup()
     return AlertDialog(
         title: const Text("Add new Task"),
         content: TextField(
-        onSubmitted: (_value){},
+        onSubmitted: (_value){
+          if(_newTaskContent!=null)
+            {
+              var task = Task(content: _newTaskContent!, timestamp:DateTime.now(), done: false);
+              _box!.add(task.toMap());
+              setState(() {
+                _newTaskContent=null;
+              });
+            }
+        },
         onChanged: (_value){
           setState(() {
             _newTaskContent = _value;
